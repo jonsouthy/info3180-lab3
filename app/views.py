@@ -7,7 +7,8 @@ This file creates your application.
 
 from app import app
 from flask import render_template, request, redirect, url_for, flash
-
+from app import mail
+from flask_mail import Message
 
 ###
 # Routing for your application.
@@ -24,6 +25,24 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
+@app.route('/contact', methods=['GET','POST'])
+def contact():
+    """Render the website's contact page."""
+    cform = Message();
+    
+    if request.method == "POST":
+        if cform.validate_on_submit():
+            name = cform["name"]
+            email = cform["email"]
+            subject = cform["subject"]
+            message = cform["message"]
+            
+            semail(name, email, subject, message)
+            
+            flash ('Message sent')
+            return redirect(url_for('home'))
+    
+    return render_template('contact.html', form=cform)
 
 ###
 # The functions below should be applicable to all Flask apps.
@@ -53,6 +72,10 @@ def page_not_found(error):
     """Custom 404 page."""
     return render_template('404.html'), 404
 
-
+def semail(name, email, subject, message):
+    msg = Message("request.form.subject", sender = "request.form.name", recipients=["request.form.email"])
+    msg.body = "This is the body"
+    mail.send(msg)
+    
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port="8080")

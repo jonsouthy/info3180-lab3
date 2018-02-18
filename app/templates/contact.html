@@ -1,0 +1,34 @@
+
+<h1 style="font-weight: bold">Contact Form</h1>
+<hr/>
+<p>Fill in this form to contact the site owner</p>
+
+<form method="POST" action="/contact">
+    {{ form.csrf_token }}
+    <div>
+        {{ form.name.label }} <span style="color: red">(Required)</span>
+        <p>Please enter your full name</p>
+        {{ form.name(size=20) }}
+    </div>
+    
+    <div>
+        {{ form.email.label }} <span style="color: red">(Required)</span>
+        <p>Please enter your email address</p>
+        {{ form.email(size=20, type="email") }}
+    </div>
+    
+    <div>
+        {{ form.subject.label }} <span style="color: red">(Required)</span>
+        <p>Please enter the subject for your message </p>
+        {{ form.subject(size=20) }}
+    </div>
+    
+    <div>
+        {{ form.message.label }} <span style="color: red">(Required)</span>
+        <p>Please enter the message you would like to send </p>
+        {{ form.message(size=40) }}
+    </div>
+    
+    <button type="submit" class="btn">Send</button>
+    
+</form>
